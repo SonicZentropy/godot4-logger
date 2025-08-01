@@ -2,7 +2,7 @@
 //!
 //! [godot-logger] is a simple logger that prints log messages to the output console inside the
 //! [Godot] game engine. It is built around the logging facade of the [log] crate, and uses the
-//! [`godot_print!`] macro from the [gdnative] bindings.
+//! [`godot_print!`] macro from the [gdext] bindings.
 //!
 //! It is possible to configure different log levels for different Rust modules, similar to other
 //! popular logging frameworks such as [env_logger] or [log4rs]. Simply provide a list as the second
@@ -16,19 +16,24 @@
 //! default log level, and a list with module-level overrides (can be empty).
 //!
 //! ```
-//! use gdnative::prelude::*;
+//! use godot::prelude::*;
 //! use godot_logger::GodotLogger;
 //! use log::{Level, LevelFilter};
 //!
-//! fn init(handle: InitHandle) {
-//!     GodotLogger::builder()
-//!         .default_log_level(Level::Info)
-//!         .add_filter("godot_logger", LevelFilter::Debug)
-//!         .init();
-//!     log::debug!("Initialized the logger");
-//! }
+//! struct MyExtension;
 //!
-//! godot_init!(init);
+//! #[gdextension]
+//! unsafe impl ExtensionLibrary for MyExtension {
+//!     fn on_level_init(level: InitLevel) {
+//!         if level == InitLevel::Core {
+//!             GodotLogger::builder()
+//!                 .default_log_level(Level::Info)
+//!                 .add_filter("godot_logger", LevelFilter::Debug)
+//!                 .init();
+//!             log::debug!("Initialized the logger");
+//!         }
+//!     }
+//! }
 //! ```
 //!
 //! The following will appear in the _Output_ console inside Godot:

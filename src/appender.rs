@@ -1,5 +1,5 @@
 use chrono::Local;
-use gdnative_core::{godot_print, godot_warn};
+use godot::log::{godot_print, godot_warn};
 use log::{Level, Record};
 use log4rs::append::Append;
 
